@@ -28,11 +28,14 @@ const game = ((player1, player2) => {
     const restart= gameBox.querySelector('.restart');
     const playerTurn=gameBox.querySelector('.player-turn');
     const winner=gameBox.querySelector('.winner');
-
+    const player1Name=gameBox.querySelector('.player1');
+    const player2Name=gameBox.querySelector('.player2');
     const render = () => {
         for (let i = 0; i < field.length; i++) {
             field[i].textContent = gameArray[Math.floor(i/3)][i%3];
         }
+        player1Name.textContent=`${player1.getName()}`;
+        player2Name.textContent=`${player2.getName()}`;
         playerTurn.textContent=`${player1.getTurn()?player1.getName():player2.getName()}'s turn`;
         if((!gameWon)&&legalMoves===9){
             winner.textContent="Tie";
@@ -46,9 +49,7 @@ const game = ((player1, player2) => {
     }
 
     const input = (e) => {
-        console.log(e.target);
         let index = e.target.dataset.index;
-        console.log(index);
         if (gameArray[Math.floor(index/3)][index%3] === '') {
             if (player1.getTurn()) {
                 gameArray[Math.floor(index/3)][index%3] = player1.getMark();
@@ -63,7 +64,6 @@ const game = ((player1, player2) => {
             legalMoves++
             gameWon=gameLogic(index);
             render();
-            console.log(legalMoves);
         }
     }
 
@@ -74,10 +74,26 @@ const game = ((player1, player2) => {
                 input(e); 
                 }
             });
+        });
 
-            restart.addEventListener('click', () =>{
-                reloadGame();
-            })
+        restart.addEventListener('click', () =>{
+            reloadGame();
+        });
+
+        player1Name.addEventListener('click',()=>{
+            let name=prompt("Player 1 name");
+            if(name!==null&&Number(name)!==0){
+                player1.setName(name);
+            }
+            render();
+        });
+
+        player2Name.addEventListener('click',()=>{
+            let name=prompt("Player 2 name");
+            if(name!==null&&Number(name)!==0){
+                player2.setName(name);
+            }
+            render();
         });
     }
 
